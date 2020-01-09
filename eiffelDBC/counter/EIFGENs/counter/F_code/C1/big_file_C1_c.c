@@ -1,0 +1,7 @@
+#include "an1.c"
+#include "op26.c"
+#include "ut23.c"
+#include "ut22.c"
+#include "is21.c"
+#include "st16.c"
+#include "ch15.c"
