@@ -73,7 +73,14 @@ feature -- queries
 			-- of the snooker table?
 		do
 		--	@need implementation
-
+		if(Zero <= a_x
+				and a_x <= Width
+				and Zero <= a_y
+				and a_y <= Length) then
+				Result:=True
+		else
+			Result:=False
+		end
 		ensure
 			class  -- static
 			Result = (Zero <= a_x
@@ -90,7 +97,7 @@ feature -- queries
 				safe (t.x, t.y)
 		do
 		--	@need implementation
-
+			Result := create {BALL_POINT}.make_from_tuple2 (t)
 		ensure
 				class
 				Result ~ create {BALL_POINT}.make_from_tuple2 (t)
@@ -101,9 +108,10 @@ feature -- comparison
 	is_equal (other: like Current): BOOLEAN
 			-- Is other attached to an object considered
 			-- equal to current object?
-		require
+		require else
 				safe(other.x,other.y)
 		do
+			Result := (x ~ other.x and y ~ other.y)
 		ensure then
 				Result = (x ~ other.x and y ~ other.y)
 		end
@@ -114,6 +122,7 @@ feature -- comparison
 		require
 			safe(other.x,other.y)
 		do
+			Result:= create {TUPLE2}.make_from_tuple ([other.x - x, other.y - y])
 		ensure
 			Result ~
 			   create {TUPLE2}.make_from_tuple ([other.x - x, other.y - y])

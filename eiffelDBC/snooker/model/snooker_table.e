@@ -19,10 +19,15 @@ feature {NONE} -- Initialization
 		require
 				a_blue /~ a_red
 		do
-			blue:=a_blue
+		--	blue:= create {BALL_POINT}.make_from_tuple2 (a_blue)
+		--	red:= create {BALL_POINT}.make_from_tuple2 (a_red)
 			red:=a_red
+			blue:= a_blue
+			pocket:= create {BALL_POINT}.make (width, length)
+
 		ensure
-			Result = (blue ~ a_blue and red ~a_red)
+		--	Result = (blue ~ a_blue and red ~a_red)
+		 red_blue_set: (blue ~ a_blue and red ~a_red)
 		end
 
 feature -- queries
@@ -36,8 +41,11 @@ feature -- queries
 	terminated: BOOLEAN
 			-- game terminates when either ball is in pocket
 		do
+			Result := (blue ~ pocket or red ~ pocket)
+
 		ensure
-				Result = (blue ~ pocket or red ~ pocket)
+			Result = (blue ~ pocket or red ~ pocket)
+			--not_terminate : (blue ~ pocket or red ~ pocket)
 		end
 
 feature -- commands
@@ -51,8 +59,11 @@ feature -- commands
 				(create {TUPLE2}.make_from_tuple
 					([blue.x + delta.x, blue.y + delta.y]))
 		do
-			blue.x:= blue.x + delta.x
-			blue.y:= blue.y + delta.y
+			--blue.x := blue.x + delta.x
+			--blue.y := blue.y + delta.y
+			blue := {BALL_POINT}.t2ball
+				(create {TUPLE2}.make_from_tuple
+					([blue.x + delta.x, blue.y + delta.y]))
 
 		ensure
 			new_blue_x: blue.x ~ old blue.x + delta.x
@@ -69,8 +80,9 @@ feature -- commands
 				(create {TUPLE2}.make_from_tuple
 					([red.x + delta.x, red.y + delta.y]))
 		do
-				red.x:= blue.x + red.x
-				red.y:= blue.y + red.y
+			red := {BALL_POINT}.t2ball
+				(create {TUPLE2}.make_from_tuple
+					([red.x + delta.x, red.y + delta.y]))
 
 		ensure
 			new_red_x: red.x ~ old red.x + delta.x
