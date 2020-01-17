@@ -78,9 +78,24 @@ feature -- derived queries
 	outgoing_sorted: ARRAY[EDGE[G]]
 			-- Return outgoing edges as a sorted array
 			-- (based on destination vertices of edges).
+			local
+				l_comparator:EDGE_COMPARATOR[G]
+				l_sorter: DS_ARRAY_QUICK_SORTER[EDGE[G]]
+				cells:ARRAY[EDGE[G]]
 		do
 
 			-- Todo: complete implementation
+			create l_comparator
+			create l_sorter.make (l_comparator)
+			create cells.make_empty
+			across outgoing as ic loop
+					cells.force (ic.item, cells.count+1)
+					print(ic.item.out + "%N")
+				end
+			
+			l_sorter.sort (cells)
+
+			Result:= cells
 
 			create Result.make_empty -- this line is for compilation purposes
 		ensure
@@ -107,6 +122,7 @@ feature -- derived queries
 		do
 
 			-- Todo: complete implementation
+			Result := incoming.count
 
 		ensure
 			incoming_edge_count:
